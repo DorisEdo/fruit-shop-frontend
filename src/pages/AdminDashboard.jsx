@@ -2,13 +2,14 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import CreateFruitForm from "../components/Admin/CreateFruitForm";
 import CreateCategoryForm from "../components/Admin/CreateCategoryForm";
+import EditFruitForm from "../components/Admin/EditFruitForm";
 import "./AdminDashboard.css";
 
 function AdminDashboard() {
   const [fruits, setFruits] = useState([]);
   const [loading, setLoading] = useState(true);
   const [refreshCategoriesSignal, setRefreshCategoriesSignal] = useState(0);
-  const [message, setMessage] = useState({ type: "", text: "" });
+  const [editingFruit, setEditingFruit] = useState(null);
 
   async function fetchFruits() {
     try {
@@ -23,7 +24,6 @@ function AdminDashboard() {
       setFruits(data);
     } catch (error) {
       console.error("Failed to fetch fruits:", error);
-      setMessage({ type: "error", text: "Failed to load inventory" });
     } finally {
       setLoading(false);
     }
@@ -39,7 +39,39 @@ function AdminDashboard() {
 
   function handleCategoryAdded() {
     setRefreshCategoriesSignal((prev) => prev + 1);
-    setMessage({ type: "success", text: "Category added successfully" });
+  }
+
+  function handleFruitUpdated(updatedFruit) {
+    setFruits((prevFruits) =>
+      prevFruits.map((fruit) =>
+        fruit.id === updatedFruit.id ? updatedFruit : fruit,
+      ),
+    );
+    setEditingFruit(null);
+  }
+
+  async function handleDeleteFruit(fruitId) {
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this fruit?",
+    );
+
+    if (!confirmDelete) return;
+
+    try {
+      const token = localStorage.getItem("token");
+
+      await axios.delete(`http://localhost:5000/api/fruits/${fruitId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      setFruits((prevFruits) =>
+        prevFruits.filter((fruit) => fruit.id !== fruitId),
+      );
+    } catch (error) {
+      console.error("Failed to delete fruit:", error);
+    }
   }
 
   return (
@@ -54,6 +86,15 @@ function AdminDashboard() {
         onFruitAdded={handleFruitAdded}
         refreshCategoriesSignal={refreshCategoriesSignal}
       />
+
+      {editingFruit && (
+        <EditFruitForm
+          fruit={editingFruit}
+          onFruitUpdated={handleFruitUpdated}
+          onCancel={() => setEditingFruit(null)}
+          refreshCategoriesSignal={refreshCategoriesSignal}
+        />
+      )}
 
       <div className="inventory-section">
         <h2>Current Inventory ({fruits.length} fruits)</h2>
@@ -70,6 +111,21 @@ function AdminDashboard() {
                 Stock: {fruit.stockQuantity}
                 {" — "}
                 Category: {fruit.category?.name || "No category"}
+                <div className="inventory-actions">
+                  <button
+                    className="edit-btn"
+                    onClick={() => setEditingFruit(fruit)}
+                  >
+                    Edit
+                  </button>
+
+                  <button
+                    className="delete-btn"
+                    onClick={() => handleDeleteFruit(fruit.id)}
+                  >
+                    Delete
+                  </button>
+                </div>
               </div>
             ))}
           </div>

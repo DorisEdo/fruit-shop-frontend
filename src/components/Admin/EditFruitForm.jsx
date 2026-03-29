@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { API_BASE_URL } from "../../config";
 import "./EditFruitForm.css";
 
 function EditFruitForm({
@@ -45,14 +46,11 @@ function EditFruitForm({
       try {
         const token = localStorage.getItem("token");
 
-        const { data } = await axios.get(
-          "http://localhost:5000/api/categories",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
+        const { data } = await axios.get(`${API_BASE_URL}/api/categories`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
           },
-        );
+        });
 
         setCategories(data);
       } catch (error) {
@@ -92,7 +90,7 @@ function EditFruitForm({
       };
 
       const { data } = await axios.put(
-        `http://localhost:5000/api/fruits/${fruit.id}`,
+        `${API_BASE_URL}/api/fruits/${fruit.id}`,
         payload,
         {
           headers: {

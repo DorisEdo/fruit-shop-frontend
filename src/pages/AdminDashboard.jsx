@@ -3,6 +3,7 @@ import axios from "axios";
 import CreateFruitForm from "../components/Admin/CreateFruitForm";
 import CreateCategoryForm from "../components/Admin/CreateCategoryForm";
 import EditFruitForm from "../components/Admin/EditFruitForm";
+import { API_BASE_URL } from "../config";
 import "./AdminDashboard.css";
 
 function AdminDashboard() {
@@ -15,11 +16,14 @@ function AdminDashboard() {
     try {
       const token = localStorage.getItem("token");
 
-      const { data } = await axios.get("http://localhost:5000/api/fruits", {
-        headers: {
-          Authorization: `Bearer ${token}`,
+      const { data } = await axios.get(
+        `${import.meta.env.VITE_API_URL}/api/fruits`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         },
-      });
+      );
 
       setFruits(data);
     } catch (error) {
@@ -60,7 +64,7 @@ function AdminDashboard() {
     try {
       const token = localStorage.getItem("token");
 
-      await axios.delete(`http://localhost:5000/api/fruits/${fruitId}`, {
+      await axios.delete(`${API_BASE_URL}/api/fruits/${fruitId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

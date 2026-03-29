@@ -6,6 +6,7 @@ import CartPage from "./components/CartPage";
 import HeartsPage from "./components/HeartsPage";
 import LoginPage from "./components/LoginPage";
 import AdminDashboard from "./pages/AdminDashboard";
+import { API_BASE_URL } from "./config";
 import "./App.css";
 
 function App() {
@@ -15,7 +16,7 @@ function App() {
 
   async function fetchFruitData(authToken) {
     try {
-      const { data } = await axios.get("http://localhost:5000/api/fruits", {
+      const { data } = await axios.get(`${API_BASE_URL}/api/fruits`, {
         headers: {
           Authorization: `Bearer ${authToken}`,
         },

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { API_BASE_URL } from "../../config";
 import "./CreateFruitForm.css";
 
 function CreateFruitForm({ onFruitAdded, refreshCategoriesSignal }) {
@@ -23,16 +24,13 @@ function CreateFruitForm({ onFruitAdded, refreshCategoriesSignal }) {
       try {
         const token = localStorage.getItem("token");
 
-        const { data } = await axios.get(
-          "http://localhost:5000/api/categories",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
+        const { data } = await axios.get(`${API_BASE_URL}/api/categories`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
           },
-        );
+        });
 
-        setCategories(data);
+        setCategories(Array.isArray(data) ? data : []);
       } catch (error) {
         console.error("Failed to fetch categories:", error);
       }
@@ -69,15 +67,11 @@ function CreateFruitForm({ onFruitAdded, refreshCategoriesSignal }) {
         categoryId: Number(formData.categoryId),
       };
 
-      const { data } = await axios.post(
-        "http://localhost:5000/api/fruits",
-        payload,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+      const { data } = await axios.post(`${API_BASE_URL}/api/fruits`, payload, {
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
-      );
+      });
 
       setMessage({ type: "success", text: "🎉 Fruit added successfully!" });
 
@@ -189,11 +183,12 @@ function CreateFruitForm({ onFruitAdded, refreshCategoriesSignal }) {
           required
         >
           <option value="">Select category</option>
-          {categories.map((category) => (
-            <option key={category.id} value={category.id}>
-              {category.name}
-            </option>
-          ))}
+          {Array.isArray(categories) &&
+            categories.map((category) => (
+              <option key={category.id} value={category.id}>
+                {category.name}
+              </option>
+            ))}
         </select>
 
         <button type="submit" disabled={loading} className="add-fruit-btn">

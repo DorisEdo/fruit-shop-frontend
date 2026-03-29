@@ -1,5 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
+import { API_BASE_URL } from "../../config";
 import "./CreateCategoryForm.css";
 
 function CreateCategoryForm({ onCategoryAdded }) {
@@ -16,7 +17,7 @@ function CreateCategoryForm({ onCategoryAdded }) {
       const token = localStorage.getItem("token");
 
       const { data } = await axios.post(
-        "http://localhost:5000/api/categories",
+        `${API_BASE_URL}/api/categories`,
         { name },
         {
           headers: {

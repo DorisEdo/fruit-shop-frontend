@@ -7,12 +7,14 @@ import HeartsPage from "./components/HeartsPage";
 import LoginPage from "./components/LoginPage";
 import AdminDashboard from "./pages/AdminDashboard";
 import { API_BASE_URL } from "./config";
+import RegisterPage from "./components/RegisterPage";
 import "./App.css";
 
 function App() {
   const [fruitArray, setFruitArray] = useState([]);
   const [error, setError] = useState(null);
   const [token, setToken] = useState(localStorage.getItem("token") || "");
+  const [showRegister, setShowRegister] = useState(false);
 
   async function fetchFruitData(authToken) {
     try {
@@ -112,7 +114,14 @@ function App() {
   };
 
   if (!token) {
-    return <LoginPage onLogin={handleLogin} />;
+    return showRegister ? (
+      <RegisterPage onSwitchToLogin={() => setShowRegister(false)} />
+    ) : (
+      <LoginPage
+        onLogin={handleLogin}
+        onSwitchToRegister={() => setShowRegister(true)}
+      />
+    );
   }
 
   return (

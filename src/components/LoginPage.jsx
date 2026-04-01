@@ -2,7 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 import "./LoginPage.css";
 
-function LoginPage({ onLogin }) {
+function LoginPage({ onLogin, onSwitchToRegister }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -62,6 +62,10 @@ function LoginPage({ onLogin }) {
 
         {error && <p className="login-error">{error}</p>}
       </div>
+
+      <p onClick={onSwitchToRegister} className="switch-link">
+        Don’t have an account? Register
+      </p>
     </div>
   );
 }

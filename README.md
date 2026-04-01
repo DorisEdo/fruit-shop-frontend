@@ -1,15 +1,36 @@
-# Fruit Inventory Management System
+---
 
-Enterprise Software Engineering (ESE) Assignment
+### 2. Frontend README (`fruit-inventory-frontend/README.md`)
 
-This project is a full-stack web application designed to manage fruit inventory, including product data, stock levels, and categories.
+````markdown
+# Fruit Inventory & Management Frontend
+
+A modern, playful and responsive React frontend for the Fruit Inventory Management System.
+
+## Features
+
+- User Login and Registration
+- Browse fruits with search, filter and sorting
+- Cart and Favourites functionality
+- Admin Dashboard to add new fruits to inventory
+- Responsive design with fun fruit theme
 
 ## Tech Stack
 
-- Frontend: React (Vite)
-- Backend: Node.js + Express (to be implemented)
-- Database: PostgreSQL (to be implemented)
+- React + Vite
+- React Router DOM
+- Axios for API calls
+- JWT for authentication
 
-## Status
+## Live Frontend
 
-Frontend initial setup complete. Backend and API integration in progress.
+**https://your-frontend-name.vercel.app** ← Replace with your actual Vercel/Render URL
+
+## Setup Instructions (Local)
+
+1. Clone the repository
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+````
